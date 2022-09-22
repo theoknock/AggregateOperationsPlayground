@@ -14,14 +14,20 @@
 
 @implementation ViewController
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+       
+    // Create a collection
     
-    // Create a collecrion
-    void (^number_aggregate)(AggregateOperation) = aggregate_operations(10);
+    __block void (^aggregate_operation)(AggregateOperation) = aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)));
+    
+    
+    
     
     // Aggregate
-    number_aggregate(^ (CFTypeRef * number_t){
+    aggregate_operation(^ (CFTypeRef * number_t){
         *(number_t) = CFBridgingRetain((__bridge id _Nullable)(^ CFTypeRef {
             __block NSNumber * number = [[NSNumber alloc] initWithUnsignedLong:c++];
             printf("\t(aggregate %lu)\n", [number unsignedLongValue]);
@@ -29,14 +35,14 @@
         })());
     });
     
-//    // Filter
-//    number_aggregate(^ (CFTypeRef * number_t){
-//        
-//        // TO-DO: Create a temporary collection for storing CFTypeRef * types that match a given boolean condition
-//        //        Replace the existing collection by passing the temporary collection to the Reduce operation
-//        *(number_t) = ([(__bridge NSNumber *)*(number_t) unsignedLongValue] % 2) ? *(number_t) : nil;
-//        printf("Filtered number == %lu\n", [(__bridge NSNumber *)*(number_t) unsignedLongValue]);
-//    });
+    // Filter
+    aggregate_operation(^ (CFTypeRef * number_t){
+        
+        // TO-DO: Create a temporary collection for storing CFTypeRef * types that match a given boolean condition
+        //        Replace the existing collection by passing the temporary collection to the Reduce operation
+        *(number_t) = ([(__bridge NSNumber *)*(number_t) unsignedLongValue] % 2) ? *(number_t) : nil;
+        printf("Filtered number == %lu\n", [(__bridge NSNumber *)*(number_t) unsignedLongValue]);
+    });
 //    
 ////    // Reduce (replace current collection with filtered aggregate by passing it to the Aggregate filter
 //    number_aggregate(^ (CFTypeRef * number_t){
@@ -55,7 +61,7 @@
     // Accumulate (Fold or Compose)
     
     // Iterate (Traverse or Map)
-    number_aggregate(^ (CFTypeRef * number_t){
+    aggregate_operation(^ (CFTypeRef * number_t){
         printf("\t(iterate %lu)\n", [(__bridge NSNumber *)*(number_t) unsignedLongValue]);
     });
 }
