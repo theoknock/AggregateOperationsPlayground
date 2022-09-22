@@ -33,27 +33,32 @@ void(^release_block_test)(const void *) = ^ (const void * block) {
 };
 
 typedef typeof(CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long)) AggregateDataStructure;
-static CFTypeRef * (^(^(^aggregate_data_structure)(unsigned long))(void))(unsigned long) = ^ (unsigned long count) {
-    typeof(CFTypeRef *) objects_t[count];
-    return ^ (CFTypeRef * objects_ptr) {
+static CFTypeRef * (^(^(^aggregate_data_structure)(unsigned long))(void))(unsigned long) = ^ (unsigned long object_count) {
+    typedef CFTypeRef objects[object_count];
+    typeof(objects) objects_ptr[object_count];
+    
+    return ^ (CFTypeRef * objects_t) {
         return ^{
             return ^ CFTypeRef * (unsigned long index) {
-                return ((CFTypeRef *)objects_ptr + index);
+                return ((CFTypeRef *)objects_t + index);
             };
         };
-    }((objects_t[0]));
+    }(objects_ptr[0]);
 };
 
-static void (^(^(^aggregate_operations)(unsigned long))(const void *))(void(^)(CFTypeRef *)) = ^ (unsigned long object_count) {
+static void (^(^(^aggregate_operations)(unsigned long))(const void *))(void (^ const __strong)(CFTypeRef *)) = ^ (unsigned long object_count) {
     return ^ (const void * retained_structure) {
-        CFTypeRef * (^(^(^ const __strong released_structure)(unsigned long))(void))(unsigned long) = (__bridge CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long))(release_block(retained_structure));
+        static CFTypeRef * (^(^(^released_structure)(unsigned long))(void))(unsigned long);
+        released_structure = (__bridge CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long))(release_block(retained_structure));
         static CFTypeRef * (^(^source)(void))(unsigned long);
         static CFTypeRef * (^stream)(unsigned long);
         stream = (source = released_structure(object_count))();
         
-        return ^ (void(^aggregate_operation)(CFTypeRef *)) {
+        return ^ (void (^ const __strong aggregate_operation)(CFTypeRef *)) {
             for (unsigned long index = 0; index < object_count; index++) {
-                aggregate_operation((stream)(index));
+                CFTypeRef * operation_ptr = stream(index);
+                printf("\t(array\t\t%p)\n\n", operation_ptr);
+                aggregate_operation(operation_ptr);
             }
         };
     };
