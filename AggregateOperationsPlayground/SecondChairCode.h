@@ -81,3 +81,21 @@ array_pointer_test(10)(^ (CFTypeRef * number_t){
 })(^ bool (CFTypeRef number) {
     return ([(__bridge NSNumber *)number unsignedLongValue] % 2);
 });
+
+/*
+ 
+ */
+
+unsigned long index = ((1UL << object_count) >> 1UL);
+do {
+    aggregate_operation(generate_pointer(index * sizeof(CFTypeRef *))); // replace for loop with conditional to call either object_ptr_generator or return nil
+} while((index = (index >> 1UL)) && (index >> 1UL));
+//            } while ((index & ~object_count) | ((index | object_count) & (index - object_count)));
+
+//            ((index) >> 1UL) && ((index) >> 1UL)
+//                       })((1UL<< object_count) >> 1UL);
+
+
+for (unsigned long index = 0; (index & ~object_count) | ((index | object_count) & (index - object_count)); index++) {
+    aggregate_operation(generate_pointer(index * sizeof(CFTypeRef *)));
+}
