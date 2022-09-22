@@ -29,6 +29,7 @@
 		B97E12A128DC4D9F00A50383 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B97E12A328DC4D9F00A50383 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B97E12A428DC4D9F00A50383 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B97E12AB28DC4DC800A50383 /* AggregateOperations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AggregateOperations.h; sourceTree = "<group>"; wrapsLines = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +68,7 @@
 				B97E129628DC4D9E00A50383 /* SceneDelegate.m */,
 				B97E129828DC4D9E00A50383 /* ViewController.h */,
 				B97E129928DC4D9E00A50383 /* ViewController.m */,
+				B97E12AB28DC4DC800A50383 /* AggregateOperations.h */,
 				B97E129B28DC4D9E00A50383 /* Main.storyboard */,
 				B97E129E28DC4D9F00A50383 /* Assets.xcassets */,
 				B97E12A028DC4D9F00A50383 /* LaunchScreen.storyboard */,
