@@ -10,6 +10,21 @@
 
 static unsigned long c = 1UL;
 
+typedef typeof(void(^)(CFTypeRef *)) AggregateOperation;
+
+static void (^(^aggregate_operations)(unsigned int))(AggregateOperation) = ^ (unsigned int object_count) {
+    typedef CFTypeRef objects[object_count];
+    typeof(objects) objects_t[object_count];
+   
+    return ^ (CFTypeRef * objects_ptr) {
+        return ^ (AggregateOperation aggregate_operation) {
+            for (unsigned int index = 0; index < object_count; index++) {
+                aggregate_operation(((CFTypeRef *)objects_ptr + index));
+            }
+        };
+    }(objects_t);
+};
+
 static void (^(^(^(^(^array_pointer_test)(unsigned int))(void(^)(CFTypeRef *)))(void(^)(CFTypeRef *)))(void(^)(CFTypeRef *)))(bool(^)(CFTypeRef)) = ^ (unsigned int object_count) {
     typedef CFTypeRef objects[object_count];
     typeof(objects) objects_ptr[object_count];
