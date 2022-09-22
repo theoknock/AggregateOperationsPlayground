@@ -29,11 +29,32 @@
         })());
     });
     
-    // Iterate
+    // Filter
+    number_aggregate(^ (CFTypeRef * number_t){
+        
+        // TO-DO: Create a temporary collection for storing CFTypeRef * types that match a given boolean condition
+        //        Replace the existing collection by passing the temporary collection to the Reduce operation
+        *(number_t) = ([(__bridge NSNumber *)*(number_t) unsignedLongValue] % 2) ? *(number_t) : nil;
+        printf("Filtered number == %lu\n", [(__bridge NSNumber *)*(number_t) unsignedLongValue]);
+    });
+    
+    // Reduce (replace current collection with filtered aggregate by passing it to the Aggregate filter
+    
+    // Accumulate (Fold or Compose)
+    
+    // Iterate (Traverse or Map)
     number_aggregate(^ (CFTypeRef * number_t){
         printf("Returned number_read == %lu\n", [(__bridge NSNumber *)*(number_t) unsignedLongValue]);
     });
 }
+
+// TO-DO: Add one-by-one variant of Aggregate operation (for function graphs)
+//        - Replace for loop with generator
+//        - Use Filter to create a subgraph of functions from the source graph using a given conditional
+//        - Use Reduce to optionally:
+//              1. replace the function graph source with the subgraph created by Filter (retains Filter conditional for predicate branching during execution of the filtered function elements)
+//              2. create a new collection with the subgraph created by Filter
+//        - Invoke each function using either 1) Iterate (individually) or 2) Accumulate (composition) and then Iterate
 
 
 @end
