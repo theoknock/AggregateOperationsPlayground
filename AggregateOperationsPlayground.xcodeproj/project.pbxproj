@@ -30,6 +30,7 @@
 		B97E12A328DC4D9F00A50383 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B97E12A428DC4D9F00A50383 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B97E12AB28DC4DC800A50383 /* AggregateOperations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AggregateOperations.h; sourceTree = "<group>"; wrapsLines = 0; };
+		B97E12AC28DC645D00A50383 /* SecondChairCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondChairCode.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +75,7 @@
 				B97E12A028DC4D9F00A50383 /* LaunchScreen.storyboard */,
 				B97E12A328DC4D9F00A50383 /* Info.plist */,
 				B97E12A428DC4D9F00A50383 /* main.m */,
+				B97E12AC28DC645D00A50383 /* SecondChairCode.h */,
 			);
 			path = AggregateOperationsPlayground;
 			sourceTree = "<group>";
