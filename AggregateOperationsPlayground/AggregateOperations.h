@@ -10,18 +10,19 @@
 
 static unsigned long c = 1UL;
 
-static CFTypeRef * (^(^pointer_generator)(unsigned long, CFTypeRef *))(unsigned long) = ^ (unsigned long count, CFTypeRef * start) {
-    typedef typeof(CFTypeRef) objects[count];
-    typeof(CFTypeRef *) objects_t[count];
-    
-    return ^ (CFTypeRef * objects_ptr) {
-        return ^ CFTypeRef * (unsigned long index) {
-            CFTypeRef * element_ptr = ((CFTypeRef *)objects_ptr + (index * sizeof(typeof(CFTypeRef *))));
-            printf("element_ptr == %p", element_ptr);
-            return element_ptr;
-        };
-    }((&objects_t)[0]);
-};
+//static CFTypeRef * (^(^pointer_generator)(unsigned long))(unsigned long) = ^ (unsigned long count) {
+//    CFTypeRef objects[count];
+//    static typeof(objects) objects_t;
+//    *objects_t = ((CFTypeRef *)objects)[0];
+//
+//    return ^ (CFTypeRef * objects_ptr) {
+//        return ^ CFTypeRef * (unsigned long index) {
+////            CFTypeRef * element_ptr = ((CFTypeRef *)objects_ptr + index);
+////            printf("element_ptr == %p", element_ptr);
+//            return ((CFTypeRef *)objects_ptr + index);
+//        };
+//    }(objects_t);
+//}; CFTypeRef * (^generate_pointer)(unsigned long) = pointer_generator(object_count);
 
 typedef typeof(void(^)(CFTypeRef *)) AggregateOperation;
 
@@ -30,15 +31,13 @@ static void (^(^aggregate_operations)(unsigned long))(AggregateOperation) = ^ (u
     typeof(objects) objects_t[object_count];
     
     return ^ (CFTypeRef * objects_ptr) {
-        CFTypeRef * (^generate_pointer)(unsigned long) = pointer_generator(object_count, objects_ptr);
-        
         return ^ (AggregateOperation aggregate_operation) {
-            for (unsigned long index = 0; (index & ~object_count) | ((index | object_count) & (index - object_count)); (index = -~index)) {
-                aggregate_operation(generate_pointer(index));
+            for (unsigned long index = 0; index < object_count; index++) {
+                aggregate_operation(^ CFTypeRef * (unsigned long index) {
+                    return ((CFTypeRef *)objects_ptr + index);
+                }(index));
             }
         };
-        
-        
     }((&objects_t)[0]);
 };
 
