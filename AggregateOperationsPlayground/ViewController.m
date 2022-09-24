@@ -53,35 +53,48 @@
 ////    });
 //};
 
-- (void)test_blk {
-    }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    static const void * retained_structure;
     void (^aggregate_operation)(void (^ const __strong)(CFTypeRef *)) = aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)));
-    
+   
     // Aggregate
-    aggregate_operation(^ (CFTypeRef * element_ptr) {
-//        printf("\t(Writing:Aggregate\t\t%p)\n\n", element_ptr);
-        typeof(^{}) block = ^{
-            printf("\t(element_ptr\t%p)\n\n", element_ptr);
+    void(^aggregate)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
+        unsigned long (^block)(void) = ^{
+            printf("%lu\t(element_ptr\t%p)\n\n", c, element_ptr);
+            return c++;
         };
         *(element_ptr) = retain_block((__bridge const void * _Nonnull)(block));
-    });
+    };
     
     // Traversal
-    aggregate_operation(^ (CFTypeRef * element_ptr) {
-//        printf("\t(Reading:Traversal\t\t%p)\n\n", element_ptr);
-        typeof(^{}) block = (__bridge typeof(^{}))(release_block(*(element_ptr)));
+    void(^traverse)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
+        unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
         block();
-    });
+    };
 
     
-//    aggregate_test();
+    // Filter
+//    void(^filter)(CFTypeRef *) = ^ (bool(^predicate)(unsigned long)) {
+//        return ^ (CFTypeRef * element_ptr) {
+//            CFTypeRef(^block)(void) = (__bridge CFTypeRef (^)(void))(*(element_ptr));
+//        };
+//    }(^ (unsigned long ) {
+//
+//
+//        return !!((c % 1));
+//    });
     
-    // app crashes when viewDidLoad returns (add sleep(1) to demonstrate)
-    // sleep(1); // app will crash after sleep executes
+    // To-Do:
+    //       The aggregate_operation(s) should be able to plug into each other
+    //       The aggregate_operation(s) should be divided by read and/or write
+    //       The aggregate_operation(s) and all other components should be divided by source --> stream --> pipeline
+    //       The aggregate_operation(s) that are part of the pipeline should be divided into intermediate and terminal operations
+    //              // intermediate operations can begin with a stream component (the for-loop or recursive construct)
+    //              // intermediate operations always plug into each other (although they should remain separate blocks so that they can be executed in any number, in any order)
+    //              // a terminal operation is one that produces either a new source or overwrites the existing one (regardless, it creates a new source)
+    aggregate_operation(aggregate);
+    aggregate_operation(traverse);
+//    aggregate_operation(filter());
 }
 
 @end

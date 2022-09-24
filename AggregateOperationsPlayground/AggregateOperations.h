@@ -47,12 +47,12 @@ static CFTypeRef * (^(^(^aggregate_data_structure)(unsigned long))(void))(unsign
 };
 
 static void (^(^(^aggregate_operations)(unsigned long))(const void *))(void (^ const __strong)(CFTypeRef *)) = ^ (unsigned long object_count) {
-    return ^ (const void * retained_structure) {
-        static CFTypeRef * (^(^(^released_structure)(unsigned long))(void))(unsigned long);
-        released_structure = (__bridge CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long))(release_block(retained_structure));
+    return ^ (const void * retained_data_structure) {
+        static CFTypeRef * (^(^(^released_data_structure)(unsigned long))(void))(unsigned long);
+        released_data_structure = (__bridge CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long))retained_data_structure; //(__bridge CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long))(release_block(retained_structure));
         static CFTypeRef * (^(^source)(void))(unsigned long);
         static CFTypeRef * (^stream)(unsigned long);
-        stream = (source = released_structure(object_count))();
+        stream = (source = released_data_structure(object_count))();
         
         return ^ (void (^ const __strong aggregate_operation)(CFTypeRef *)) {
             for (unsigned long index = 0; index < object_count; index++) {
