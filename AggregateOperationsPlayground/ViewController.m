@@ -55,34 +55,53 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    void (^aggregate_operation)(void (^ const __strong)(CFTypeRef *)) = aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)));
+    [self test];
+}
+
+- (void)test {
+    __block unsigned long (^aggregate_operation)(void (^ const __strong)(CFTypeRef *)) = aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)));
    
     // Aggregate
+    c = 0;
     void(^aggregate)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
         unsigned long (^block)(void) = ^{
-            printf("%lu\t(element_ptr\t%p)\n\n", c, element_ptr);
-            return c++;
+            return c;
         };
-        *(element_ptr) = retain_block((__bridge const void * _Nonnull)(block));
+        *(element_ptr) = (__bridge CFTypeRef)([block copy]); //Block_copy(retain_block((__bridge const void * _Nonnull)(block)));
+        printf("\telement_ptr recv\t%p\n\n", *(element_ptr));
     };
     
     // Traversal
     void(^traverse)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
         unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
-        block();
+        (!block) ?: block();
+        printf("\ttraverse\t%p\n\n", *(element_ptr));
     };
-
     
     // Filter
-//    void(^filter)(CFTypeRef *) = ^ (bool(^predicate)(unsigned long)) {
-//        return ^ (CFTypeRef * element_ptr) {
-//            CFTypeRef(^block)(void) = (__bridge CFTypeRef (^)(void))(*(element_ptr));
-//        };
-//    }(^ (unsigned long ) {
-//
-//
-//        return !!((c % 1));
-//    });
+    void(^filter)(CFTypeRef *) = ^ (bool(^predicate)(unsigned long)) {
+        return ^ (CFTypeRef * element_ptr) {
+            unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr));
+            printf("predicate == %d", predicate(block()));
+            
+            if (predicate(block())) {
+                Block_release((__bridge const void * _Nonnull)(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr))));
+                *(element_ptr) = nil;
+            }
+            printf("\tfilter\t%p\n\n", *(element_ptr));
+        };
+    }(^ bool (unsigned long conditional) {
+        return c % 2;
+    });
+    
+    // Reduce
+    void(^reduce)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
+        static unsigned long count = 0;
+        unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
+        (!block) ?: count++;
+        c = count;
+        printf("\tcount == (%lu %lu)\tfilter\t%p\n\n", c, count, *(element_ptr));
+    };
     
     // To-Do:
     //       The aggregate_operation(s) should be able to plug into each other
@@ -94,7 +113,15 @@
     //              // a terminal operation is one that produces either a new source or overwrites the existing one (regardless, it creates a new source)
     aggregate_operation(aggregate);
     aggregate_operation(traverse);
-//    aggregate_operation(filter());
+    aggregate_operation(filter);
+    aggregate_operation(traverse);
+    ^ void (unsigned long new_object_count) {
+        printf("new_object_count == %d\n\n", new_object_count);
+        release_block((__bridge const void * _Nonnull)(aggregate_data_structure));
+        aggregate_operation = aggregate_operations(new_object_count)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)));
+        aggregate_operation(aggregate);
+    }(aggregate_operation(reduce));
+    aggregate_operation(traverse);
 }
 
 @end
