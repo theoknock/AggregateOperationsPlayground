@@ -35,9 +35,8 @@ void(^release_block_test)(const void *) = ^ (const void * block) {
 static CFTypeRef _Nonnull * _Nonnull (^_Nonnull (^ _Nonnull (^ _Nonnull aggregate_data_structure)(unsigned long))(void))(unsigned long) = ^ (unsigned long object_count) {
     typedef CFTypeRef objects[object_count * sizeof(CFTypeRef *)];
     typeof(objects) objects_ptr[object_count * sizeof(CFTypeRef *)];
-    printf("\nobjects_ptr[0]\t%p\n", objects_ptr[0]);
     return ^ (CFTypeRef * objects_t) {
-        printf("objects_t\t\t%p\n", objects_t);
+        printf("%lu objects_t\t\t%p\n", object_count, objects_t);
         return ^{
             return ^ CFTypeRef * (unsigned long index) {
 //                printf("stream[%lu]\t\t%p\n", index, ((CFTypeRef *)objects_t + (index * sizeof(CFTypeRef *))));

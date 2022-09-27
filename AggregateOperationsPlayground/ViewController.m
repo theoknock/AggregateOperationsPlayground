@@ -67,50 +67,72 @@
     
     // Aggregate
     void(^aggregate)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-        unsigned long (^block)(void) = ^{
-            printf("\taggregate (block)\t%lu\n\n", (toggle_bit ^= 1UL));
-            return toggle_bit;
-        };
-        *(element_ptr) = (__bridge CFTypeRef)([block copy]); //Block_copy(retain_block((__bridge const void * _Nonnull)(block)));
-        printf("\taggregate\t%p\n\n", *(element_ptr));
+        ^{
+            printf("---aggregate begin---%p\n", *(element_ptr));
+        }();
+            unsigned long (^block)(void) = ^{
+                ^{
+                    printf("---aggregate---%p\n", *(element_ptr));
+                }();
+                return toggle_bit;
+            };
+            *(element_ptr) = (__bridge const void * _Nonnull)(block); // Block_copy(retain_block((__bridge const void * _Nonnull)(block))); //
+        ^{
+            printf("---aggregate end---%p\n", *(element_ptr));
+        }();
     };
     
     // Traversal
     void(^traverse)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
+        ^{
+            printf("---traverse start---%p\n", *(element_ptr));
+        }();
         unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
         (!block) ?: block();
-        printf("\ttraverse\t%p\n\n", *(element_ptr));
+        ^{
+            printf("---traverse end---%p\n", *(element_ptr));
+        }();
     };
     
     // Filter
     void(^filter)(CFTypeRef *) = ^ (bool(^predicate)(unsigned long)) {
         return ^ (CFTypeRef * element_ptr) {
+            ^{
+                printf("---filter begin---%p\n", *(element_ptr));
+            }();
             unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr));
-            if (block && predicate(block())) {
-                //                Block_release((__bridge const void * _Nonnull)(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr))));
+            (!predicate(0UL)) ?: ^{
+//                Block_release((__bridge const void * _Nonnull)(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr))));
                 *(element_ptr) = NULL;
-            }
-            printf("\tfilter\t%p\t\t%d\n\n", *(element_ptr),  predicate(block()));
+            }();
+            ^{
+                printf("---filter end---%p\n", *(element_ptr));
+            }();
         };
     }(^ bool (unsigned long conditional) {
-        return conditional;
+        return (toggle_bit ^= 1);
     });
     
     // Reduce
     void(^reduce)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
+        ^{
+            printf("---reduce start---%p\n", *(element_ptr));
+        }();
         static unsigned long count = 0;
         static unsigned long iterations = 0;
         unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
         (!*(element_ptr)) ?: count++;
         if (iterations++ == 9) ^ void (unsigned long new_object_count) {
             printf("new_object_count == %lu\n\n", new_object_count);
-            release_block((__bridge const void * _Nonnull)(aggregate_data_structure));
+//            release_block((__bridge const void * _Nonnull)(aggregate_data_structure));
             unsigned long (^ _Nonnull (^ _Nonnull (^ _Nonnull aggregate_operations_1)(unsigned long))(const void * _Nonnull))(void (^ _Nonnull const __strong)(CFTypeRef _Nonnull * _Nonnull)) = [aggregate_operations copy];
             CFTypeRef * (^(^(^data_structure_1)(unsigned long))(void))(unsigned long) = [aggregate_data_structure copy];
-            aggregate_operation = [(aggregate_operations_1(10)((__bridge const void * _Nonnull)(data_structure_1))) copy];//(aggregate_data_structure); // [(aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)))) copy];
+            aggregate_operation = [(aggregate_operations_1(new_object_count)((__bridge const void * _Nonnull)(data_structure_1))) copy];//(aggregate_data_structure); // [(aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)))) copy];
             
         }(count);
-        printf("\treduce (%lu)\t%p\n\n", count, *(element_ptr));
+        ^{
+            printf("---reduce end---%p\n", *(element_ptr));
+        }();
     };
     
     // To-Do:
@@ -125,18 +147,19 @@
     // Add these to a collection
     unsigned long (^ _Nonnull (^ _Nonnull (^ _Nonnull aggregate_operations_2)(unsigned long))(const void * _Nonnull))(void (^ _Nonnull const __strong)(CFTypeRef _Nonnull * _Nonnull)) = [aggregate_operations copy];
     CFTypeRef * (^(^(^data_structure_2)(unsigned long))(void))(unsigned long) = aggregate_data_structure;
-    __block unsigned long (^aggregate_operation_composition)(void (^ const __strong)(CFTypeRef *)) = ((aggregate_operations_2(4))((__bridge const void * _Nonnull)(data_structure_2)));//(aggregate_data_structure);
+    __block unsigned long (^aggregate_operation_composition)(void (^ const __strong)(CFTypeRef *)) = ((aggregate_operations_2(6))((__bridge const void * _Nonnull)(data_structure_2)));//(aggregate_data_structure);
     
     
     static unsigned long aggregate_operation_index = 0;
     void(^aggregate__)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-        __block void(^aggregate_[4])(CFTypeRef *) = {[aggregate copy], [traverse copy], [filter copy], [reduce copy]};
+        __block void(^aggregate_[6])(CFTypeRef *) = {[aggregate copy], [traverse copy], [filter copy], [reduce copy], [aggregate copy], [traverse copy]};
         //        aggregate_operation(aggregate_[aggregate_operation_index]);
         //        aggregate_operation(aggregate_[aggregate_operation_index]);
         *(element_ptr) = (__bridge CFTypeRef)(aggregate_[aggregate_operation_index]); //Block_copy(retain_block((__bridge const void * _Nonnull)(block)));
         printf("\t-----------------------------aggregate_[%lu]\t%p\n\n", aggregate_operation_index++, *(element_ptr));
     };
     
+    static unsigned long aggregate_operation_index_2 = 0;
     void(^traverse__)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
         //        void(^block_)(CFTypeRef *) = (__bridge void (^)(CFTypeRef *))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
         aggregate_operation((__bridge void (^)(CFTypeRef *))(*(element_ptr)));
