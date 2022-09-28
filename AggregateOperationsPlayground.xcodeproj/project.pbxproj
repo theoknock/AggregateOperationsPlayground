@@ -20,6 +20,7 @@
 /* Begin PBXFileReference section */
 		B93B1B6B28E48D3800E4A34E /* LogViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewDataSource.h; sourceTree = "<group>"; };
 		B93B1B6C28E48D3800E4A34E /* LogViewDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogViewDataSource.m; sourceTree = "<group>"; };
+		B93BB82128E4CA51007C4BEE /* LogEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogEngine.h; sourceTree = "<group>"; wrapsLines = 0; };
 		B97E128F28DC4D9E00A50383 /* AggregateOperationsPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AggregateOperationsPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B97E129228DC4D9E00A50383 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B97E129328DC4D9E00A50383 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 		B97E128628DC4D9E00A50383 = {
 			isa = PBXGroup;
 			children = (
+				B93BB82128E4CA51007C4BEE /* LogEngine.h */,
 				B97E129128DC4D9E00A50383 /* AggregateOperationsPlayground */,
 				B97E129028DC4D9E00A50383 /* Products */,
 			);

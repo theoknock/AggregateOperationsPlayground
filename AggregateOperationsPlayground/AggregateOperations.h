@@ -10,7 +10,7 @@
 
 #import "LogViewDataSource.h"
 
-//static unsigned long c = 1UL;
+static unsigned long c = 1UL;
 
 int int_val = 2;
 const int (^ const __strong int_block)(int) = ^ int (int i) {
@@ -37,9 +37,9 @@ void(^release_block_test)(const void *) = ^ (const void * block) {
 static CFTypeRef _Nonnull * _Nonnull (^_Nonnull (^ _Nonnull (^ _Nonnull aggregate_data_structure)(unsigned long))(void))(unsigned long) = ^ (unsigned long object_count) {
     typedef CFTypeRef objects[object_count * sizeof(CFTypeRef *)];
     typeof(objects) objects_ptr[object_count * sizeof(CFTypeRef *)];
-    [LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__]
-                                                  entry:[NSString stringWithFormat:@"aggregate_data_structure: %lu objects", object_count]
-                                         attributeStyle:LogEntryAttributeStyleEvent];
+    //[LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__]
+//                                                  entry:[NSString stringWithFormat:@"aggregate_data_structure: %lu objects", object_count]
+//                                         attributeStyle:LogEntryAttributeStyleEvent];
 
     return ^ (CFTypeRef * objects_t) {
         return ^{
@@ -58,7 +58,7 @@ static unsigned long (^ _Nonnull (^ _Nonnull (^ _Nonnull aggregate_operations)(u
         retained_data_structure = [(__bridge CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long))data_structure copy]; //(__bridge CFTypeRef * (^(^(^)(unsigned long))(void))(unsigned long))(release_block(retained_structure));
         CFTypeRef * (^(^source)(void))(unsigned long) = retained_data_structure(object_count);
         CFTypeRef * (^stream)(unsigned long) = source();
-        stream = (source = retained_data_structure(object_count))();
+        stream = [(source = retained_data_structure(object_count))() copy];
         
         static unsigned long counter = 0;
         

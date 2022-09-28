@@ -29,11 +29,12 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <attributedString key="attributedText">
-                                            <fragment content="AggregateOperationsPlayground Developer Console">
+                                            <fragment>
+                                                <string key="content">AggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer ConsoleAggregateOperationsPlayground Developer Console</string>
                                                 <attributes>
-                                                    <color key="NSColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <font key="NSFont" size="14" name="CourierNewPSMT"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                                 </attributes>
                                             </fragment>
                                         </attributedString>
