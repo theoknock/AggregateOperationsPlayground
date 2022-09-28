@@ -87,23 +87,13 @@ static LogEngine textViewLogger;
     self.logTextView.delegate = self;
     
     textViewLogger = log_engine(self.logTextView);
-    for (int i = 0; i < 100; i++) textViewLogger(@"Test entry for log view\n");
     
     CAGradientLayer * gradient = [CAGradientLayer new];
     gradient.frame = self.logContainerView.frame;
     [gradient setColors:@[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor]];
     self.logContainerView.layer.mask = gradient;
     
-//    dispatch_source_set_event_handler(LogViewDataSource.logData.log_view_dispatch_source, ^{
-//        [self.logTextView setAttributedText:[LogViewDataSource.logData logAttributedText]];
-//    });
-//    dispatch_resume(LogViewDataSource.logData.log_view_dispatch_source);
-    
-    //[LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithFormat:@"%@", self.description]
-//                                              entry:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__]
-//                                     attributeStyle:LogEntryAttributeStyleEvent];
-    
-    
+
     [self test];
 }
 
@@ -124,9 +114,7 @@ static LogEngine textViewLogger;
             return (toggle_bit ^= 1UL);
         };
         *(element_ptr) = retain_block((__bridge const void * _Nonnull)(block)); // (__bridge const void * _Nonnull)(block);
-        //[LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithString:@"Aggregate\t::\tOperation"]
-//                                                  entry:[NSString stringWithFormat:@"%p\t\t%p", *(element_ptr), &(element_ptr)]
-//                                         attributeStyle:LogEntryAttributeStyleOperation];
+        textViewLogger([NSString stringWithFormat:@"aggregate\t\t\toperation\n%p\t%p\n", *(element_ptr), &(element_ptr)]);
     };
     
     // Traversal
@@ -134,26 +122,21 @@ static LogEngine textViewLogger;
         unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
         (!block) ?: ^{
             block();
-            //[LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithString:@"Traverse\t::\tOperation"]
-//                                                      entry:[NSString stringWithFormat:@"%p\t\t%p", *(element_ptr), &(element_ptr)]
-//                                             attributeStyle:LogEntryAttributeStyleOperation];
+            textViewLogger([NSString stringWithFormat:@"traverse\t\t\toperation\n%p\t%p\n", *(element_ptr), &(element_ptr)]);
         }();
     };
     
     // Map
     void(^map)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-//        __block unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
-//        (!block) ?: ^{
-//            block = ^{
-//                return c++;
-//            };
-//            *(element_ptr) = retain_block((__bridge const void * _Nonnull)(block)); /* Block_copy(retain_block((__bridge const void * _Nonnull)(block))); */
-//        }();
-//        
-//        //        *(element_ptr) = /* Block_copy(retain_block((__bridge const void * _Nonnull)(block))); */ (__bridge const void * _Nonnull)(block);
-        //[LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithString:@"Map\t::\tOperation"]
-//                                                  entry:[NSString stringWithFormat:@"%p\t\t%p", *(element_ptr), &(element_ptr)]
-//                                         attributeStyle:LogEntryAttributeStyleOperation];
+        __block unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
+        (!block) ?: ^{
+            block = ^{
+                return c++;
+            };
+            *(element_ptr) = retain_block((__bridge const void * _Nonnull)(block)); /* Block_copy(retain_block((__bridge const void * _Nonnull)(block))); */
+        }();
+        
+        textViewLogger([NSString stringWithFormat:@"map\t\t\toperation\n%p\t%p\n", *(element_ptr), &(element_ptr)]);
     };
     
     // Filter
@@ -167,9 +150,7 @@ static LogEngine textViewLogger;
             }();
             (!(*(element_ptr))) ?: ^{
                 block();
-                //[LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithString:@"Filter\t::\tOperation"]
-//                                                          entry:[NSString stringWithFormat:@"%p\t\t%p", *(element_ptr), *(element_ptr)]
-//                                                 attributeStyle:LogEntryAttributeStyleOperation];
+                textViewLogger([NSString stringWithFormat:@"filter\t\t\toperation\n%p\t%p\n", *(element_ptr), &(element_ptr)]);
             }();
         };
     }(^ bool (unsigned long conditional) {
@@ -178,50 +159,48 @@ static LogEngine textViewLogger;
     
     // Reduce
     void(^reduce)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-    static unsigned long count = 0;
-    static unsigned long iterations = 0;
-    unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
-    (!*(element_ptr)) ?: count++;
-    if (iterations++ == 9) ^ void (unsigned long new_object_count) {
-        printf("new_object_count == %lu\n\n", new_object_count);
-        //            release_block((__bridge const void * _Nonnull)(aggregate_data_structure));
-        aggregate_operation = ([aggregate_operations(10)((__bridge const void * _Nonnull)[aggregate_data_structure copy]) copy]);//(aggregate_data_structure); // [(aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)))) copy];
-        
-    }(count);
-    ^{
-        printf("---reduce end---%p\n", *(element_ptr));
-    }();
-};
-
-// To-Do:
-//       The aggregate_operation(s) should be able to plug into each other
-//       The aggregate_operation(s) should be divided by read and/or write
-//       The aggregate_operation(s) and all other components should be divided by source --> stream --> pipeline
-//       The aggregate_operation(s) that are part of the pipeline should be divided into intermediate and terminal operations
-//              // intermediate operations can begin with a stream component (the for-loop or recursive construct)
-//              // intermediate operations always plug into each other (although they should remain separate blocks so that they can be executed in any number, in any order)
-//              // a terminal operation is one that produces either a new source or overwrites the existing one (regardless, it creates a new source)
-
-// Add these to a collection
+        static unsigned long count = 0;
+        static unsigned long iterations = 0;
+        unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
+        (!*(element_ptr)) ?: count++;
+        if (iterations++ == 9) ^ void (unsigned long new_object_count) {
+            printf("new_object_count == %lu\n\n", new_object_count);
+            //            release_block((__bridge const void * _Nonnull)(aggregate_data_structure));
+            aggregate_operation = ([aggregate_operations(10)((__bridge const void * _Nonnull)[aggregate_data_structure copy]) copy]);//(aggregate_data_structure); // [(aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)))) copy];
+            
+        }(count);
+        textViewLogger([NSString stringWithFormat:@"reduce\t\t\toperation\n%p\t%p\n", *(element_ptr), &(element_ptr)]);
+    };
+    
+    // To-Do:
+    //       The aggregate_operation(s) should be able to plug into each other
+    //       The aggregate_operation(s) should be divided by read and/or write
+    //       The aggregate_operation(s) and all other components should be divided by source --> stream --> pipeline
+    //       The aggregate_operation(s) that are part of the pipeline should be divided into intermediate and terminal operations
+    //              // intermediate operations can begin with a stream component (the for-loop or recursive construct)
+    //              // intermediate operations always plug into each other (although they should remain separate blocks so that they can be executed in any number, in any order)
+    //              // a terminal operation is one that produces either a new source or overwrites the existing one (regardless, it creates a new source)
+    
+    // Add these to a collection
     static unsigned long (^aggregate_operation_composition)(void (^ const __strong)(CFTypeRef *));
     aggregate_operation_composition = ([aggregate_operations(7)((__bridge const void * _Nonnull)[aggregate_data_structure copy]) copy]);
-
-
-
-static unsigned long aggregate_operation_index = 0;
-void(^aggregate__)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-    __block void(^aggregate_[7])(CFTypeRef *) = {[aggregate copy], [traverse copy],  [filter copy], [map copy], [reduce copy], [aggregate copy], [traverse copy]};
-    //        aggregate_operation(aggregate_[aggregate_operation_index]);
-    //        aggregate_operation(aggregate_[aggregate_operation_index]);
-    *(element_ptr) = (__bridge CFTypeRef)(aggregate_[aggregate_operation_index]); //Block_copy(retain_block((__bridge const void * _Nonnull)(block)));
-    printf("\t-----------------------------aggregate_[%lu]\t%p\n\n", aggregate_operation_index++, *(element_ptr));
-};
-
-static unsigned long aggregate_operation_index_2 = 0;
-void(^traverse__)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-    //        void(^block_)(CFTypeRef *) = (__bridge void (^)(CFTypeRef *))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
-    aggregate_operation((__bridge void (^)(CFTypeRef *))(*(element_ptr)));
-    printf("\t-----------------------------traverse__[%lu]\t%p\n\n", --aggregate_operation_index, *(element_ptr));
+    
+    
+    
+    static unsigned long aggregate_operation_index = 0;
+    void(^aggregate__)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
+        __block void(^aggregate_[7])(CFTypeRef *) = {[aggregate copy], [traverse copy],  [filter copy], [map copy], [reduce copy], [aggregate copy], [traverse copy]};
+        //        aggregate_operation(aggregate_[aggregate_operation_index]);
+        //        aggregate_operation(aggregate_[aggregate_operation_index]);
+        *(element_ptr) = (__bridge CFTypeRef)(aggregate_[aggregate_operation_index]); //Block_copy(retain_block((__bridge const void * _Nonnull)(block)));
+        printf("\t-----------------------------aggregate_[%lu]\t%p\n\n", aggregate_operation_index++, *(element_ptr));
+    };
+    
+    static unsigned long aggregate_operation_index_2 = 0;
+    void(^traverse__)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
+        //        void(^block_)(CFTypeRef *) = (__bridge void (^)(CFTypeRef *))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
+        aggregate_operation((__bridge void (^)(CFTypeRef *))(*(element_ptr)));
+        printf("\t-----------------------------traverse__[%lu]\t%p\n\n", --aggregate_operation_index, *(element_ptr));
 };
 aggregate_operation_composition(aggregate__);
 aggregate_operation_composition(traverse__);
