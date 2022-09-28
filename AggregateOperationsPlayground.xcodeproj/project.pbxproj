@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B93B1B6D28E48D3800E4A34E /* LogViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = B93B1B6C28E48D3800E4A34E /* LogViewDataSource.m */; };
 		B97E129428DC4D9E00A50383 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B97E129328DC4D9E00A50383 /* AppDelegate.m */; };
 		B97E129728DC4D9E00A50383 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B97E129628DC4D9E00A50383 /* SceneDelegate.m */; };
 		B97E129A28DC4D9E00A50383 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B97E129928DC4D9E00A50383 /* ViewController.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B93B1B6B28E48D3800E4A34E /* LogViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewDataSource.h; sourceTree = "<group>"; };
+		B93B1B6C28E48D3800E4A34E /* LogViewDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogViewDataSource.m; sourceTree = "<group>"; };
 		B97E128F28DC4D9E00A50383 /* AggregateOperationsPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AggregateOperationsPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B97E129228DC4D9E00A50383 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B97E129328DC4D9E00A50383 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -63,6 +66,8 @@
 		B97E129128DC4D9E00A50383 /* AggregateOperationsPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				B93B1B6B28E48D3800E4A34E /* LogViewDataSource.h */,
+				B93B1B6C28E48D3800E4A34E /* LogViewDataSource.m */,
 				B97E129228DC4D9E00A50383 /* AppDelegate.h */,
 				B97E129328DC4D9E00A50383 /* AppDelegate.m */,
 				B97E129528DC4D9E00A50383 /* SceneDelegate.h */,
@@ -154,6 +159,7 @@
 				B97E129428DC4D9E00A50383 /* AppDelegate.m in Sources */,
 				B97E12A528DC4D9F00A50383 /* main.m in Sources */,
 				B97E129728DC4D9E00A50383 /* SceneDelegate.m in Sources */,
+				B93B1B6D28E48D3800E4A34E /* LogViewDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

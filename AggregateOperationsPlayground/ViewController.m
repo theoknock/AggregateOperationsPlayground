@@ -7,8 +7,10 @@
 
 #import "ViewController.h"
 #import "AggregateOperations.h"
+#import "AppDelegate.h"
+#import "LogViewDataSource.h"
 
-@interface ViewController ()
+@interface ViewController () <UITextViewDelegate>
 
 @end
 
@@ -55,43 +57,57 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.logTextView.delegate = self;
+    
+    
+    
+    CAGradientLayer * gradient = [CAGradientLayer new];
+    gradient.frame = self.logContainerView.frame;
+    [gradient setColors:@[(id)[UIColor blackColor].CGColor, (id)[UIColor colorWithWhite:0.0 alpha:0.1].CGColor]];
+    self.logContainerView.layer.mask = gradient;
+    
+    dispatch_source_set_event_handler(LogViewDataSource.logData.log_view_dispatch_source, ^{
+        [self.logTextView setAttributedText:[LogViewDataSource.logData logAttributedText]];
+    });
+    dispatch_resume(LogViewDataSource.logData.log_view_dispatch_source);
+    
+    [LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithFormat:@"%@", self.description]
+                                              entry:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__]
+                                     attributeStyle:LogEntryAttributeStyleEvent];
+    
+    
     [self test];
+}
+
+- (void)didReceiveMemoryWarning {
+    
+    [super didReceiveMemoryWarning];
 }
 
 - (void)test {
     __block unsigned long toggle_bit = 0UL; // declare and initialize global variable
     
-    unsigned long (^ _Nonnull (^ _Nonnull (^ _Nonnull aggregate_operations_1)(unsigned long))(const void * _Nonnull))(void (^ _Nonnull const __strong)(CFTypeRef _Nonnull * _Nonnull)) = [aggregate_operations copy];
-    CFTypeRef * (^(^(^data_structure_1)(unsigned long))(void))(unsigned long) = [aggregate_data_structure copy];
-    __block unsigned long (^aggregate_operation)(void (^ const __strong)(CFTypeRef *)) = [(aggregate_operations_1(10)((__bridge const void * _Nonnull)(data_structure_1))) copy];//(aggregate_data_structure); // [(aggregate_operations(10)(retain_block((__bridge const void * _Nonnull)(aggregate_data_structure)))) copy];
+    __block unsigned long (^aggregate_operation)(void (^ const __strong)(CFTypeRef *)) = ([aggregate_operations(10)((__bridge const void * _Nonnull)[aggregate_data_structure copy]) copy]);
     
     // Aggregate
     void(^aggregate)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-        ^{
-            printf("---aggregate begin---%p\n", *(element_ptr));
-        }();
             unsigned long (^block)(void) = ^{
-                ^{
-                    printf("---aggregate---%p\n", *(element_ptr));
-                }();
-                return toggle_bit;
+                return (toggle_bit ^= 1UL);
             };
-            *(element_ptr) = (__bridge const void * _Nonnull)(block); // Block_copy(retain_block((__bridge const void * _Nonnull)(block))); //
-        ^{
-            printf("---aggregate end---%p\n", *(element_ptr));
-        }();
+            *(element_ptr) = /* Block_copy(retain_block((__bridge const void * _Nonnull)(block))); */ (__bridge const void * _Nonnull)(block);
+        [LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithFormat:@"Aggregate\t::\tOperation"]
+                                                  entry:[NSString stringWithFormat:@"%p\t\t%p", *(element_ptr), &(element_ptr)]
+                                         attributeStyle:(toggle_bit) ? LogEntryAttributeStyleOperation : LogEntryAttributeStyleOperation];
     };
     
     // Traversal
     void(^traverse)(CFTypeRef *) = ^ (CFTypeRef * element_ptr) {
-        ^{
-            printf("---traverse start---%p\n", *(element_ptr));
-        }();
         unsigned long (^block)(void) = (__bridge unsigned long (^)(void))(*(element_ptr)); //(__bridge typeof(CFTypeRef(^)(void)))(release_block(*(element_ptr)));
         (!block) ?: block();
-        ^{
-            printf("---traverse end---%p\n", *(element_ptr));
-        }();
+        [LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithFormat:@"Traverse\t::\tOperation"]
+                                                  entry:[NSString stringWithFormat:@"%p\t\t%p", *(element_ptr), &(element_ptr)]
+                                         attributeStyle:(toggle_bit) ? LogEntryAttributeStyleOperation : LogEntryAttributeStyleOperationSecondary];
     };
     
     // Filter
@@ -145,9 +161,7 @@
     //              // a terminal operation is one that produces either a new source or overwrites the existing one (regardless, it creates a new source)
     
     // Add these to a collection
-    unsigned long (^ _Nonnull (^ _Nonnull (^ _Nonnull aggregate_operations_2)(unsigned long))(const void * _Nonnull))(void (^ _Nonnull const __strong)(CFTypeRef _Nonnull * _Nonnull)) = [aggregate_operations copy];
-    CFTypeRef * (^(^(^data_structure_2)(unsigned long))(void))(unsigned long) = aggregate_data_structure;
-    __block unsigned long (^aggregate_operation_composition)(void (^ const __strong)(CFTypeRef *)) = ((aggregate_operations_2(6))((__bridge const void * _Nonnull)(data_structure_2)));//(aggregate_data_structure);
+    __block unsigned long (^aggregate_operation_composition)(void (^ const __strong)(CFTypeRef *)) = ([aggregate_operations(6)((__bridge const void * _Nonnull)[aggregate_data_structure copy]) copy]);
     
     
     static unsigned long aggregate_operation_index = 0;

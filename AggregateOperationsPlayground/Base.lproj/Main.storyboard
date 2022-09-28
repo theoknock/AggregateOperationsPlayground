@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,16 +10,74 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" id="Nnq-9V-7KZ">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <viewLayoutGuide key="contentLayoutGuide" id="iN8-eR-l39"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="jrD-xV-ugI"/>
+                            </scrollView>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0If-ds-OmT">
+                                <rect key="frame" x="0.0" y="20" width="390" height="844"/>
+                                <subviews>
+                                    <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" editable="NO" usesAttributedText="YES" selectable="NO" id="BMa-N2-Y69">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="AggregateOperationsPlayground Developer Console">
+                                                <attributes>
+                                                    <color key="NSColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <font key="NSFont" size="14" name="CourierNewPSMT"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="2O2-rF-3lZ"/>
+                                        </connections>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.19" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="BMa-N2-Y69" firstAttribute="centerX" secondItem="0If-ds-OmT" secondAttribute="centerX" id="E5a-Wv-J4S"/>
+                                    <constraint firstItem="BMa-N2-Y69" firstAttribute="centerY" secondItem="0If-ds-OmT" secondAttribute="centerY" id="oH9-9t-LdX"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Nnq-9V-7KZ" firstAttribute="centerY" secondItem="0If-ds-OmT" secondAttribute="centerY" id="1qG-YO-k1j"/>
+                            <constraint firstItem="BMa-N2-Y69" firstAttribute="width" secondItem="iN8-eR-l39" secondAttribute="width" id="FZz-LZ-sPc"/>
+                            <constraint firstItem="jrD-xV-ugI" firstAttribute="top" secondItem="BMa-N2-Y69" secondAttribute="top" id="G8Y-ah-g1x"/>
+                            <constraint firstItem="0If-ds-OmT" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="I5U-M1-VV9"/>
+                            <constraint firstItem="0If-ds-OmT" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="20" symbolic="YES" id="ICL-yC-h4t"/>
+                            <constraint firstItem="jrD-xV-ugI" firstAttribute="leading" secondItem="BMa-N2-Y69" secondAttribute="leading" id="Ifm-sM-6kQ"/>
+                            <constraint firstItem="BMa-N2-Y69" firstAttribute="height" secondItem="iN8-eR-l39" secondAttribute="height" id="OFL-Jm-717"/>
+                            <constraint firstItem="Nnq-9V-7KZ" firstAttribute="height" secondItem="0If-ds-OmT" secondAttribute="height" id="YUJ-1w-sP5"/>
+                            <constraint firstItem="Nnq-9V-7KZ" firstAttribute="width" secondItem="0If-ds-OmT" secondAttribute="width" id="fED-e7-Awf"/>
+                            <constraint firstItem="BMa-N2-Y69" firstAttribute="trailing" secondItem="jrD-xV-ugI" secondAttribute="trailing" id="mLC-Vi-LDZ"/>
+                            <constraint firstItem="0If-ds-OmT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rjn-gM-OYL"/>
+                            <constraint firstItem="BMa-N2-Y69" firstAttribute="bottom" secondItem="jrD-xV-ugI" secondAttribute="bottom" id="sFP-FZ-s2G"/>
+                            <constraint firstItem="Nnq-9V-7KZ" firstAttribute="centerX" secondItem="0If-ds-OmT" secondAttribute="centerX" id="wrJ-VM-1ag"/>
+                            <constraint firstItem="0If-ds-OmT" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="zRB-20-fsW"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="logContainerView" destination="0If-ds-OmT" id="fFF-RG-2vz"/>
+                        <outlet property="logTextView" destination="BMa-N2-Y69" id="brX-LB-kvL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <customObject id="WyL-dc-a6W" customClass="LogViewDataSource"/>
             </objects>
+            <point key="canvasLocation" x="140" y="-2"/>
         </scene>
     </scenes>
 </document>

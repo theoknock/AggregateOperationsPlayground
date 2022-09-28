@@ -8,6 +8,8 @@
 #ifndef AggregateOperations_h
 #define AggregateOperations_h
 
+#import "LogViewDataSource.h"
+
 //static unsigned long c = 1UL;
 
 int int_val = 2;
@@ -35,8 +37,11 @@ void(^release_block_test)(const void *) = ^ (const void * block) {
 static CFTypeRef _Nonnull * _Nonnull (^_Nonnull (^ _Nonnull (^ _Nonnull aggregate_data_structure)(unsigned long))(void))(unsigned long) = ^ (unsigned long object_count) {
     typedef CFTypeRef objects[object_count * sizeof(CFTypeRef *)];
     typeof(objects) objects_ptr[object_count * sizeof(CFTypeRef *)];
+    [LogViewDataSource.logData addLogEntryWithTitle:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__]
+                                                  entry:[NSString stringWithFormat:@"aggregate_data_structure: %lu objects", object_count]
+                                         attributeStyle:LogEntryAttributeStyleEvent];
+
     return ^ (CFTypeRef * objects_t) {
-        printf("%lu objects_t\t\t%p\n", object_count, objects_t);
         return ^{
             return ^ CFTypeRef * (unsigned long index) {
 //                printf("stream[%lu]\t\t%p\n", index, ((CFTypeRef *)objects_t + (index * sizeof(CFTypeRef *))));
